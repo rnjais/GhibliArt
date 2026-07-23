@@ -1,21 +1,18 @@
 package in.aryan.ghibliapi.config;
 
+import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.cloud.openfeign.support.FeignHttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverters;
-import org.springframework.web.client.RestTemplate;
-
-import java.beans.Encoder;
 
 @Configuration
 public class FeignConfig {
 
     @Bean
-    public Encoder feignformEncoder(){
-        return new SpringFormEncoder(
-                new SpringEncoder(()-> new HttpMessageConverters(new RestTemplate().getMessageConverters())
-                );
+    public Encoder feignFormEncoder(ObjectProvider<FeignHttpMessageConverters> messageConverters) {
+        return new SpringFormEncoder(new SpringEncoder(messageConverters));
     }
 }
